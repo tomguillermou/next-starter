@@ -1,4 +1,7 @@
-import { redirect } from 'next/navigation'
+'use client'
+
+import { useRouter } from 'next/navigation'
+import { useActionState } from 'react'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -10,24 +13,21 @@ import {
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { signUp } from '@/lib/auth-client'
 
-async function register(formData: FormData) {
-  'use server'
-
-  const email = formData.get('email') as string
-  const password = formData.get('password') as string
-
-  await signUp.email({
-    email,
-    name: email,
-    password,
-  })
-
-  redirect('/')
-}
+import { register } from '../api/register'
 
 export function RegisterForm() {
+  const router = useRouter()
+
+  const [state, formAction, isPending] = useActionState(register, {
+    success: false,
+    error: null,
+  })
+
+  if (state.success) {
+    router.push('/')
+  }
+
   return (
     <div className="flex flex-col gap-6">
       <Card>
@@ -38,7 +38,7 @@ export function RegisterForm() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form action={register}>
+          <form action={formAction}>
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
@@ -52,7 +52,6 @@ export function RegisterForm() {
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="password">Password</Label>
-
                 <Input
                   id="password"
                   name="password"
@@ -61,8 +60,13 @@ export function RegisterForm() {
                   required
                 />
               </div>
-              <Button type="submit" className="w-full">
-                Register
+
+              {state.error && (
+                <p className="text-sm text-destructive">{state.error}</p>
+              )}
+
+              <Button type="submit" className="w-full" disabled={isPending}>
+                {isPending ? 'Registering...' : 'Register'}
               </Button>
             </div>
           </form>
