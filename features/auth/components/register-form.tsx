@@ -1,5 +1,7 @@
 'use client'
 
+import { Loader2 } from 'lucide-react'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useActionState } from 'react'
 
@@ -30,6 +32,10 @@ export function RegisterForm() {
 
   return (
     <div className="flex flex-col gap-6">
+      <Link href="/" className="text-center text-2xl font-bold">
+        🏠 Home
+      </Link>
+
       <Card>
         <CardHeader>
           <CardTitle className="text-2xl">Register</CardTitle>
@@ -66,8 +72,16 @@ export function RegisterForm() {
               )}
 
               <Button type="submit" className="w-full" disabled={isPending}>
-                {isPending ? 'Registering...' : 'Register'}
+                {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Register
               </Button>
+            </div>
+
+            <div className="mt-4 text-center text-sm">
+              Already have an account?{' '}
+              <Link href="/login" className="underline underline-offset-4">
+                Login
+              </Link>
             </div>
           </form>
         </CardContent>

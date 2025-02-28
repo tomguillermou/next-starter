@@ -5,10 +5,10 @@ import { APIError } from 'better-auth/api'
 import { auth } from '@/lib/auth'
 
 export const register = async (_: unknown, formData: FormData) => {
-  const email = formData.get('email') as string
-  const password = formData.get('password') as string
-
   try {
+    const email = formData.get('email') as string
+    const password = formData.get('password') as string
+
     await auth.api.signUpEmail({
       body: {
         email,
