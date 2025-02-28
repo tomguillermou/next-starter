@@ -3,7 +3,7 @@
 import { Loader2 } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useActionState } from 'react'
+import { useActionState, useEffect } from 'react'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -26,9 +26,11 @@ export function LoginForm() {
     error: null,
   })
 
-  if (state.success) {
-    router.push('/')
-  }
+  useEffect(() => {
+    if (state.success) {
+      router.push('/')
+    }
+  }, [state, router])
 
   return (
     <div className="flex flex-col gap-6">
