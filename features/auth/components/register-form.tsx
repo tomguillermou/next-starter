@@ -58,6 +58,7 @@ export function RegisterForm() {
                   required
                 />
               </div>
+
               <div className="grid gap-2">
                 <Label htmlFor="password">Password</Label>
                 <Input
@@ -67,6 +68,11 @@ export function RegisterForm() {
                   placeholder="********"
                   required
                 />
+
+                <p className="text-xs text-muted-foreground">
+                  Password should be at least 8 characters including a number
+                  and an uppercase letter.
+                </p>
               </div>
 
               {state.error && (
