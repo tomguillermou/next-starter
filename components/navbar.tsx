@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 import { getSession } from '@/lib/auth'
 
 import { LoginButton } from './auth/login-button'
@@ -9,7 +11,9 @@ export async function Navbar() {
 
   return (
     <nav className="flex items-center justify-between border-b bg-white p-4">
-      <h1 className="text-2xl font-bold">🚀 NextJS Starter</h1>
+      <h1 className="text-2xl font-bold">
+        <Link href="/">🚀 NextJS Starter</Link>
+      </h1>
 
       <div className="flex items-center gap-4">
         {session && <LogoutButton />}

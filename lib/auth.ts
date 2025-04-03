@@ -1,4 +1,5 @@
 import { betterAuth } from 'better-auth'
+import { APIError } from 'better-auth/api'
 import { nextCookies } from 'better-auth/next-js'
 import { headers } from 'next/headers'
 
@@ -12,7 +13,7 @@ export const auth = betterAuth({
   plugins: [nextCookies()],
 })
 
-export const getSession = async () => {
+export async function getSession() {
   const session = await auth.api.getSession({
     headers: await headers(),
   })
@@ -20,26 +21,44 @@ export const getSession = async () => {
   return session
 }
 
-export const signInEmail = async (email: string, password: string) => {
-  await auth.api.signInEmail({
-    body: {
-      email,
-      password,
-    },
-  })
+export async function signInEmail(email: string, password: string) {
+  try {
+    await auth.api.signInEmail({
+      body: {
+        email,
+        password,
+      },
+    })
+  } catch (error) {
+    if (error instanceof APIError) {
+      return error.body.message
+    }
+
+    console.log(error)
+    return 'Something went wrong. Please try again.'
+  }
 }
 
-export const signUpEmail = async (email: string, password: string) => {
-  await auth.api.signUpEmail({
-    body: {
-      email,
-      password,
-      name: email,
-    },
-  })
+export async function signUpEmail(email: string, password: string) {
+  try {
+    await auth.api.signUpEmail({
+      body: {
+        email,
+        password,
+        name: email,
+      },
+    })
+  } catch (error) {
+    if (error instanceof APIError) {
+      return error.body.message
+    }
+
+    console.log(error)
+    return 'Something went wrong. Please try again.'
+  }
 }
 
-export const signOut = async () => {
+export async function signOut() {
   await auth.api.signOut({
     headers: await headers(),
   })

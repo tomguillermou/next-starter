@@ -5,7 +5,12 @@ import { z } from 'zod'
 
 import { signInEmail, signOut, signUpEmail } from '@/lib/auth'
 
-const userSchema = z.object({
+const loginSchema = z.object({
+  email: z.string().email(),
+  password: z.string(),
+})
+
+const registerSchema = z.object({
   email: z.string().email(),
   password: z
     .string()
@@ -15,39 +20,41 @@ const userSchema = z.object({
 })
 
 export async function login(prevState: unknown, formData: FormData) {
-  try {
-    const { error, data: user } = userSchema.safeParse({
-      email: formData.get('email'),
-      password: formData.get('password'),
-    })
+  const { error, data } = loginSchema.safeParse({
+    email: formData.get('email'),
+    password: formData.get('password'),
+  })
 
-    if (error) {
-      return 'Invalid credentials'
-    }
-
-    await signInEmail(user.email, user.password)
-  } catch (error) {
-    console.error(error)
-    return 'Something went wrong. Please try again.'
+  if (error) {
+    return error.issues[0].message
   }
+
+  const loginError = await signInEmail(data.email, data.password)
+
+  if (loginError) {
+    return loginError
+  }
+
+  redirect('/')
 }
 
 export async function register(prevState: unknown, formData: FormData) {
-  try {
-    const { error, data: user } = userSchema.safeParse({
-      email: formData.get('email'),
-      password: formData.get('password'),
-    })
+  const { error, data: user } = registerSchema.safeParse({
+    email: formData.get('email'),
+    password: formData.get('password'),
+  })
 
-    if (error) {
-      return 'Invalid credentials'
-    }
-
-    await signUpEmail(user.email, user.password)
-  } catch (error) {
-    console.error(error)
-    return 'Something went wrong. Please try again.'
+  if (error) {
+    return error.issues[0].message
   }
+
+  const registerError = await signUpEmail(user.email, user.password)
+
+  if (registerError) {
+    return registerError
+  }
+
+  redirect('/')
 }
 
 export async function logout() {
