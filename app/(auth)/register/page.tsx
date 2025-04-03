@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 
-import { RegisterForm } from '@/features/auth/components/register-form'
+import { RegisterForm } from '@/components/auth/register-form'
 import { getSession } from '@/lib/auth'
 
 export default async function Page() {

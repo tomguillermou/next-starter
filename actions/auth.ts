@@ -14,7 +14,7 @@ const userSchema = z.object({
     .regex(/[0-9]/, 'Password must contain at least one digit'),
 })
 
-export const login = async (prevState: unknown, formData: FormData) => {
+export async function login(prevState: unknown, formData: FormData) {
   try {
     const { error, data: user } = userSchema.safeParse({
       email: formData.get('email'),
@@ -32,7 +32,7 @@ export const login = async (prevState: unknown, formData: FormData) => {
   }
 }
 
-export const register = async (prevState: unknown, formData: FormData) => {
+export async function register(prevState: unknown, formData: FormData) {
   try {
     const { error, data: user } = userSchema.safeParse({
       email: formData.get('email'),
@@ -50,7 +50,7 @@ export const register = async (prevState: unknown, formData: FormData) => {
   }
 }
 
-export const logout = async () => {
+export async function logout() {
   await signOut()
 
   redirect('/')

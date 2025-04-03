@@ -1,7 +1,8 @@
-import { LoginButton } from '@/features/auth/components/login-button'
-import { LogoutButton } from '@/features/auth/components/logout-button'
-import { RegisterButton } from '@/features/auth/components/register-button'
 import { getSession } from '@/lib/auth'
+
+import { LoginButton } from './auth/login-button'
+import { LogoutButton } from './auth/logout-button'
+import { RegisterButton } from './auth/register-button'
 
 export async function Navbar() {
   const session = await getSession()
