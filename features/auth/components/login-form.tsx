@@ -2,8 +2,7 @@
 
 import { Loader2 } from 'lucide-react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import { useActionState, useEffect } from 'react'
+import { useActionState } from 'react'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -16,21 +15,10 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
-import { login } from '../api/login'
+import { login } from '../actions'
 
 export function LoginForm() {
-  const router = useRouter()
-
-  const [state, formAction, isPending] = useActionState(login, {
-    success: false,
-    error: null,
-  })
-
-  useEffect(() => {
-    if (state.success) {
-      router.push('/')
-    }
-  }, [state, router])
+  const [error, formAction, pending] = useActionState(login, undefined)
 
   return (
     <div className="flex flex-col gap-6">
@@ -69,12 +57,10 @@ export function LoginForm() {
                 />
               </div>
 
-              {state.error && (
-                <p className="text-sm text-destructive">{state.error}</p>
-              )}
+              {error && <p className="text-sm text-destructive">{error}</p>}
 
-              <Button className="w-full" type="submit" disabled={isPending}>
-                {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              <Button className="w-full" type="submit" disabled={pending}>
+                {pending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 Login
               </Button>
             </div>

@@ -1,26 +1,13 @@
-'use client'
-
-import { useRouter } from 'next/navigation'
-
 import { Button } from '@/components/ui/button'
-import { authClient } from '@/lib/auth-client'
+
+import { logout } from '../actions'
 
 export function LogoutButton() {
-  const router = useRouter()
-
-  const handleLogout = () => {
-    authClient.signOut({
-      fetchOptions: {
-        onSuccess: () => {
-          router.push('/')
-        },
-      },
-    })
-  }
-
   return (
-    <Button variant="outline" onClick={handleLogout}>
-      Logout
-    </Button>
+    <form action={logout}>
+      <Button type="submit" variant="outline">
+        Logout
+      </Button>
+    </form>
   )
 }

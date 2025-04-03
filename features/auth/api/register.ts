@@ -1,16 +1,14 @@
 'use server'
 
-import { APIError } from 'better-auth/api'
-
 import { auth } from '@/lib/auth'
 
-export const register = async (_: unknown, formData: FormData) => {
+export const register = async (prevState: unknown, formData: FormData) => {
   try {
     const email = formData.get('email') as string
     const password = formData.get('password') as string
 
     if (!isPasswordValid(password)) {
-      return { success: false, error: 'Password is not valid' }
+      return 'Password is not valid'
     }
 
     await auth.api.signUpEmail({
@@ -20,13 +18,10 @@ export const register = async (_: unknown, formData: FormData) => {
         name: email,
       },
     })
-
-    return { success: true, error: null }
   } catch (error) {
-    if (error instanceof APIError) {
-      return { success: false, error: error.body.message }
-    }
-    return { success: false, error: 'Something went wrong. Please try again.' }
+    console.error(error)
+
+    return 'Something went wrong. Please try again.'
   }
 }
 

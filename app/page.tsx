@@ -1,12 +1,10 @@
-'use client'
-
 import Link from 'next/link'
 
 import { Navbar } from '@/components/navbar'
-import { authClient } from '@/lib/auth-client'
+import { getSession } from '@/lib/auth'
 
-export default function Home() {
-  const { data: session } = authClient.useSession()
+export default async function Home() {
+  const session = await getSession()
 
   return (
     <>

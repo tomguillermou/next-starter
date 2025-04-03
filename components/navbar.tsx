@@ -1,14 +1,10 @@
-'use client'
-
-import Link from 'next/link'
-
+import { LoginButton } from '@/features/auth/components/login-button'
 import { LogoutButton } from '@/features/auth/components/logout-button'
-import { authClient } from '@/lib/auth-client'
+import { RegisterButton } from '@/features/auth/components/register-button'
+import { getSession } from '@/lib/auth'
 
-import { Button } from './ui/button'
-
-export function Navbar() {
-  const { data: session } = authClient.useSession()
+export async function Navbar() {
+  const session = await getSession()
 
   return (
     <nav className="flex items-center justify-between border-b bg-white p-4">
@@ -19,12 +15,8 @@ export function Navbar() {
 
         {!session && (
           <>
-            <Button variant="outline" asChild>
-              <Link href="/login">Login</Link>
-            </Button>
-            <Button asChild>
-              <Link href="/register">Register</Link>
-            </Button>
+            <LoginButton />
+            <RegisterButton />
           </>
         )}
       </div>
