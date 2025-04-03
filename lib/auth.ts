@@ -19,3 +19,28 @@ export const getSession = async () => {
 
   return session
 }
+
+export const signInEmail = async (email: string, password: string) => {
+  await auth.api.signInEmail({
+    body: {
+      email,
+      password,
+    },
+  })
+}
+
+export const signUpEmail = async (email: string, password: string) => {
+  await auth.api.signUpEmail({
+    body: {
+      email,
+      password,
+      name: email,
+    },
+  })
+}
+
+export const signOut = async () => {
+  await auth.api.signOut({
+    headers: await headers(),
+  })
+}

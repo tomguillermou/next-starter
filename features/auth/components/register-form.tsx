@@ -15,7 +15,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
-import { register } from '../api/register'
+import { register } from '../actions'
 
 export function RegisterForm() {
   const [error, formAction, pending] = useActionState(register, undefined)
