@@ -1,14 +1,20 @@
-import { betterAuth } from 'better-auth'
 import { APIError } from 'better-auth/api'
-import { nextCookies } from 'better-auth/next-js'
+import { betterAuth } from 'better-auth'
 import { headers } from 'next/headers'
-
+import { nextCookies } from 'better-auth/next-js'
 import { pool } from './database'
 
 export const auth = betterAuth({
   database: pool,
   emailAndPassword: {
     enabled: true,
+  },
+  socialProviders: {
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      scope: ['email', 'profile'],
+    },
   },
   plugins: [nextCookies()],
 })
@@ -62,4 +68,15 @@ export async function signOut() {
   await auth.api.signOut({
     headers: await headers(),
   })
+}
+
+export async function getGoogleLoginUrl() {
+  const { url } = await auth.api.signInSocial({
+    body: {
+      provider: 'google',
+      errorCallbackURL: '/login',
+    },
+  })
+
+  return url
 }

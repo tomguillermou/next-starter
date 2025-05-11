@@ -3,7 +3,12 @@
 import { redirect } from 'next/navigation'
 import { z } from 'zod'
 
-import { signInEmail, signOut, signUpEmail } from '@/lib/auth'
+import {
+  getGoogleLoginUrl,
+  signInEmail,
+  signOut,
+  signUpEmail,
+} from '@/lib/auth'
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -61,4 +66,12 @@ export async function logout() {
   await signOut()
 
   redirect('/')
+}
+
+export async function signInGoogle() {
+  const url = await getGoogleLoginUrl()
+
+  if (url) {
+    redirect(url)
+  }
 }
